@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# print config if requested
+case $1 in
+   config)
+        cat << 'EOM'
+graph_title Temperature / Humidity
+graph_vlabel temp[C] / humid[%]
+graph_info Temperature and humidity measured with Aosong's AM2321 sensor.
+temperature.label temperature
+temperature.info Temperature measured with AM2321.
+humidity.label humidity
+humidity.info Humidity measured with AM2321.
+EOM
+
+        exit 0;;
+esac
+
+# measure temperature and humidity with am2321
+temp_humid=`/home/mtakagi/am2321/am2321` || exit 1
+
+# print the result in Munin plugin format
+printf "temperature.value "; echo $temp_humid | cut -d ' ' -f1
+printf "humidity.value "; echo $temp_humid | cut -d ' ' -f2
