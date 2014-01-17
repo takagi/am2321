@@ -16,7 +16,7 @@ EOM
 esac
 
 # measure temperature and humidity with am2321
-temp_humid=`/home/pi/am2321/am2321` || exit 1
+temp_humid=`sleep 2; /home/pi/am2321/am2321` || exit 1
 
 # print humidity in Munin plugin format
 printf "humidity.value "; echo $temp_humid | cut -d ' ' -f2
