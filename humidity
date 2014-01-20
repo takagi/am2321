@@ -7,6 +7,7 @@ case $1 in
 graph_title Humidity
 graph_vlabel humidity[%]
 graph_category am2321
+graph_args --rigid --lower-limit 0 --upper-limit 100
 graph_info Humidity measured with Aosong's AM2321 sensor.
 desirable.label desirable
 desirable.info Desirable humidity (60%).
