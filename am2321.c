@@ -8,7 +8,11 @@
 /* I2C character device */
 #define I2C_DEVICE "/dev/i2c-0"
 
-/* I2C address of AM2321 sensor in 7 bits */
+/* I2C address of AM2321 sensor in 7 bits
+ * - the first 7 bits should be passed to ioctl system call
+ *   because the least 1 bit of the address represents read/write
+ *   and the i2c driver takes care of it
+ */
 #define AM2321_ADDR (0xB8 >> 1)
 
 
