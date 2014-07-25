@@ -5,7 +5,7 @@ case $1 in
    config)
         cat << 'EOM'
 graph_title Temperature
-graph_vlabel temperature[‹C]
+graph_vlabel temperature[C]
 graph_category am2321
 graph_info Temperature measured with Aosong's AM2321 sensor.
 temperature.label temperature
