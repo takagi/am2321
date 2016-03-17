@@ -105,21 +105,23 @@ void am2321_dump( st_am2321 measured ) {
   return;
 }
 
-short __am2321_temperature_raw( st_am2321 measured ) {
+unsigned short __am2321_temperature_raw( st_am2321 measured ) {
   return (measured.data[4] << 8) + measured.data[5];
 }
 
 float am2321_temperature( st_am2321 measured ) {
-  short raw = __am2321_temperature_raw( measured );
-  if ( ! raw & 0x8000 )
+  unsigned short raw  = __am2321_temperature_raw( measured );
+  unsigned short msb  = raw & 0x8000;
+  unsigned short rest = raw & 0x7fff;
+  if ( ! msb )
     // Highest bit (Bit15) is equal to 0 indicates a positive temperature.
-    return (raw & 0x7fff) / 10.0;
+    return rest / 10.0;
   else
     // Highest bit (Bit15) is equal to 1 indicates a negative temperature.
-    return - (raw & 0x7fff) / 10.0;
+    return - rest / 10.0;
 }
 
-short __am2321_humidity_raw( st_am2321 measured ) {
+unsigned short __am2321_humidity_raw( st_am2321 measured ) {
   return (measured.data[2] << 8) + measured.data[3];
 }
 
