@@ -110,7 +110,13 @@ short __am2321_temperature_raw( st_am2321 measured ) {
 }
 
 float am2321_temperature( st_am2321 measured ) {
-  return __am2321_temperature_raw( measured ) / 10.0;
+  short raw = __am2321_temperature_raw( measured );
+  if ( ! raw & 0x8000 )
+    // Highest bit (Bit15) is equal to 0 indicates a positive temperature.
+    return (raw & 0x7fff) / 10.0;
+  else
+    // Highest bit (Bit15) is equal to 1 indicates a negative temperature.
+    return - (raw & 0x7fff) / 10.0;
 }
 
 short __am2321_humidity_raw( st_am2321 measured ) {
