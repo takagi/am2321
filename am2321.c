@@ -6,7 +6,7 @@
 
 
 /* I2C character device */
-#define I2C_DEVICE "/dev/i2c-0"
+#define I2C_DEVICE "/dev/i2c-1"
 
 /* I2C address of AM2321 sensor in 7 bits
  * - the first 7 bits should be passed to ioctl system call
