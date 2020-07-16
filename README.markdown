@@ -17,4 +17,4 @@ Copyright (c) 2014 Masayuki Takagi (kamonama@gmail.com)
 
 ## License
 
-Licensed under the LGPL License.
+Licensed under the MIT License.
