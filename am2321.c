@@ -105,28 +105,28 @@ void am2321_dump( st_am2321 measured ) {
   return;
 }
 
-short __am2321_temperature( st_am2321 measured ) {
+unsigned short __am2321_temperature_raw( st_am2321 measured ) {
   return (measured.data[4] << 8) + measured.data[5];
 }
 
-short am2321_temperature_integral( st_am2321 measured ) {
-  return __am2321_temperature( measured ) / 10;
+float am2321_temperature( st_am2321 measured ) {
+  unsigned short raw  = __am2321_temperature_raw( measured );
+  unsigned short msb  = raw & 0x8000;
+  unsigned short rest = raw & 0x7fff;
+  if ( ! msb )
+    // Highest bit (Bit15) is equal to 0 indicates a positive temperature.
+    return rest / 10.0;
+  else
+    // Highest bit (Bit15) is equal to 1 indicates a negative temperature.
+    return - rest / 10.0;
 }
 
-short am2321_temperature_fraction( st_am2321 measured ) {
-  return __am2321_temperature( measured ) % 10;
-}
-
-short __am2321_humidity( st_am2321 measured ) {
+unsigned short __am2321_humidity_raw( st_am2321 measured ) {
   return (measured.data[2] << 8) + measured.data[3];
 }
 
-short am2321_humidity_integral( st_am2321 measured ) {
-  return __am2321_humidity( measured ) / 10;
-}
-
-short am2321_humidity_fraction( st_am2321 measured ) {
-  return __am2321_humidity( measured ) % 10;
+float am2321_humidity( st_am2321 measured ) {
+  return __am2321_humidity_raw( measured ) / 10.0;
 }
 
 
@@ -202,21 +202,15 @@ st_am2321 am2321_stub() {
  */
 
 void print_am2321( st_am2321 measured ) {
-  printf( "%d.%d %d.%d\n",
-          am2321_temperature_integral( measured ),
-          am2321_temperature_fraction( measured ),
-          am2321_humidity_integral( measured ),
-          am2321_humidity_fraction( measured ) );
+  printf( "%0.1f %0.1f\n",
+          am2321_temperature( measured ),
+          am2321_humidity( measured ) );
   return;
 }
 
 void print_am2321_human_readable( st_am2321 measured ) {
-  printf( "Temperature %d.%d [C]\n",
-          am2321_temperature_integral( measured ),
-          am2321_temperature_fraction( measured ) );
-  printf( "Humidity    %d.%d [%%]\n",
-          am2321_humidity_integral( measured ),
-          am2321_humidity_fraction( measured ) );
+  printf( "Temperature %0.1f [C]\n", am2321_temperature( measured ) );
+  printf( "Humidity    %0.1f [%%]\n", am2321_humidity( measured ) );
   return;
 }
 
